@@ -3,11 +3,38 @@
 version: '3.4'
 
 services:
-  knoex:
-    image: knoex
-    build:
-      context: .
-      dockerfile: Knoex/Dockerfile
+  # knoex:
+  #   image: knoex
+  #   build:
+  #     context: .
+  #     dockerfile: Knoex/Dockerfile
+  #   environment:
+  #       - "ConnectionStrings__PostgreSQL=Server=database; Port=5432; Database=knoex; Username=knoex; Password=knoex;"
+  #   ports:
+  #     - 5142:5142
+  #     - 7017:7017
+  #   networks:
+  #     - network
+  db:
+    container_name: database
+    image: postgres:alpine
     ports:
-      - 5142:5142
-      - 7017:7017
+        - "5432:5432"
+    environment:
+        POSTGRES_USER: knoex
+        POSTGRES_PASSWORD: knoex
+        POSTGRES_DB: knoex
+    volumes:
+        - database:/var/lib/postgresql/data
+    networks:
+        - network
+
+networks:
+    network:
+        driver: "bridge"
+
+volumes:
+    storage:
+        driver: "local"
+    database:
+        driver: "local"
