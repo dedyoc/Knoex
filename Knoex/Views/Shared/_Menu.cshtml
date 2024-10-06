@@ -4,8 +4,7 @@
             <div class="flex items-center">
                 <div class="hidden sm:block flex-shrink-0">
                     <a href="/">
-                        <img src="~/img/knoex-logo.svg" alt="Knoex Logo" style="width: 50px; height: auto;" />
-                    </a>
+                        <img src="~/img/knoex-logo.svg" alt="Knoex Logo" class="w-10 h-auto"> </a>
                 </div>
                 <div class="hidden lg:block">
                     <div class="ml-10 flex items-baseline space-x-4">
@@ -29,7 +28,7 @@
                     <input type="text" placeholder="Search..." class="p-0 border-0 bg-transparent focus:outline-none">
                 </div>
                 <!-- Profile dropdown -->
-                @if (User.Identity.IsAuthenticated)
+                @if (User?.Identity?.IsAuthenticated == true)
                 {
                     <div class="hidden lg:block ml-3 relative">
                         <div>
@@ -98,7 +97,7 @@
                 class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Users</a>
         </div>
         <div class="pt-4 pb-3 border-t border-gray-700">
-            @if (User.Identity.IsAuthenticated)
+            @if (User?.Identity?.IsAuthenticated == true)
             {
                 <div class="flex items-center px-5">
                     <div class="flex-shrink-0">

@@ -1,0 +1,49 @@
+@model Knoex.ViewModels.LoginViewModel
+@{
+    Layout = "_EmptyLayout";
+    ViewData["Title"] = "Login";
+}
+<div>
+    <div>
+        <div>
+            <div>
+                <img src="~/img/knoex-logo.svg" alt="Knoex Logo">
+                <h2>Sign in to your account</h2>
+            </div>
+            @if (Model.LoginFailed)
+            {
+                <div>
+                    <img src="~/img/knoex-logo.svg" alt="Knoex Logo" style="width: 50px; height: auto;" />
+                    The username or password is incorrect
+                </div>
+            }
+            <form action="/login" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="returnUrl" value="@Model.ReturnUrl">
+                <div>
+                    <div>
+                        <input aria-label="Username" name="username" type="text" required placeholder="Username">
+                    </div>
+                    <div>
+                        <input aria-label="Password" name="password" type="password" required placeholder="Password">
+                    </div>
+                </div>
+                <div>
+                    <div>
+                        <input id="remember" name="remember" type="checkbox">
+                        <label for="remember">Remember me</label>
+                    </div>
+                    <div>
+                        <a href="/register">Create a new account</a>
+                    </div>
+                </div>
+                <div>
+                    <button type="submit">
+
+                        Sign in
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

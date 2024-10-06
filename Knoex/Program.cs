@@ -2,6 +2,9 @@ using Knoex.Data;
 using Knoex.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using Knoex.ActionFilter;
+using Microsoft.AspNetCore.Mvc;
+using Knoex.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,26 +16,50 @@ builder.Services.AddControllersWithViews();
 // For local development (during testing before Docker):
 var connectionString = "Host=localhost;Port=5432;Database=knoex;Username=knoex;Password=knoex;";
 
-builder.Services.AddDbContext<KnoexContext>(options => // Use your DbContext name
-    {
-        options.UseNpgsql(connectionString);
-        options.UseSnakeCaseNamingConvention();
-    });
+#region Configure services
+builder.Services.AddDbContext<KnoexContext>(options =>
+{
+    options.UseNpgsql(connectionString);
+    options.UseSnakeCaseNamingConvention();
+});
 
-builder.Services.AddIdentity<User, Role>(options => options.SignIn.RequireConfirmedAccount = true) // Use your User and Role model classes
-    .AddEntityFrameworkStores<KnoexContext>(); // Use your DbContext name
+builder.Services.AddIdentity<User, Role>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<KnoexContext>();
+
 builder.Services.Configure<IdentityOptions>(options =>
 {
     options.User.RequireUniqueEmail = true;
 });
+
 builder.Services.ConfigureApplicationCookie(options =>
-            {
-                options.LoginPath = "/login";
-                options.LogoutPath = "/logout";
-                options.Cookie.Name = "session";
-                options.Cookie.HttpOnly = true;
-                options.Cookie.SameSite = SameSiteMode.Strict;
-            });
+{
+    options.LoginPath = "/login";
+    options.LogoutPath = "/logout";
+    options.Cookie.Name = "session";
+    options.Cookie.HttpOnly = true;
+    options.Cookie.SameSite = SameSiteMode.Strict;
+});
+
+builder.Services.AddAntiforgery(options =>
+{
+    options.HeaderName = "X-CSRF-TOKEN";
+    options.FormFieldName = "csrf";
+    options.Cookie.Name = "csrf";
+    options.Cookie.HttpOnly = true;
+    options.Cookie.SameSite = SameSiteMode.Strict;
+});
+
+builder.Services.AddMvc(options =>
+{
+    options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+    options.Filters.Add<ViewBagActionFilter>();
+});
+
+builder.Services.AddTransient<IUserRepository, UserRepository>();
+builder.Services.AddHttpContextAccessor();
+#endregion
+
+#region Configure app
 var app = builder.Build();
 
 var logger = app.Services.GetRequiredService<ILogger<Program>>();
@@ -41,7 +68,6 @@ var logger = app.Services.GetRequiredService<ILogger<Program>>();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
@@ -50,7 +76,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthentication(); // Add this line!  Essential for Identity
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
@@ -71,5 +97,6 @@ using (var scope = app.Services.CreateScope())
         logger.LogError(ex, "An error occurred while connecting to the database.");
     }
 }
+#endregion
 
 app.Run();
