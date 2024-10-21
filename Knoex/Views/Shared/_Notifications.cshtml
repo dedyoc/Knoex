@@ -1,0 +1,31 @@
+<div>
+    @foreach (var notification in ViewBag.Notifications)
+    {
+        <div x-cloak x-data="{show: false}" x-show="show"
+            x-init="setTimeout(() => show = true, 100); setTimeout(() => show = false, 5000)">
+
+            @if (@notification.Split("||")[0] == "success")
+            {
+                <div>
+                    <p>
+                        Success
+                    </p>
+                </div>
+            }
+            else
+            {
+                <div>
+                    <p>
+                        Failed
+                    </p>
+                </div>
+            }
+            <div>
+                @notification.Split("||")[1]
+                <p>
+                    @notification.Split("||")[2]
+                </p>
+            </div>
+        </div>
+    }
+</div>

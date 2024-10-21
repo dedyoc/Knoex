@@ -24,10 +24,13 @@ builder.Services.AddDbContext<KnoexContext>(options =>
 });
 
 builder.Services.AddIdentity<User, Role>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<KnoexContext>();
+    .AddEntityFrameworkStores<KnoexContext>()
+    .AddDefaultTokenProviders();
 
 builder.Services.Configure<IdentityOptions>(options =>
 {
+    options.SignIn.RequireConfirmedAccount = false;
+
     options.User.RequireUniqueEmail = true;
 });
 

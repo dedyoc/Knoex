@@ -4,7 +4,7 @@ using Knoex.Models;
 
 namespace Knoex.Controllers;
 
-public class HomeController : Controller
+public class HomeController : CommonController
 {
     private readonly ILogger<HomeController> _logger;
 

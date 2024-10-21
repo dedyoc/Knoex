@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Knoex.Controllers
 {
-    public class AuthenticationController : Controller
+    public class AuthenticationController : CommonController
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
@@ -33,6 +33,7 @@ namespace Knoex.Controllers
                 var signInResult = await _signInManager.PasswordSignInAsync(user, password, remember, false);
                 if (signInResult.Succeeded)
                 {
+                    AddNotification("Login Successful", "You have successfully logged in.");
                     return string.IsNullOrEmpty(returnUrl)
                         ? RedirectToAction(nameof(HomeController.Index), "Home")
                         : Redirect(returnUrl);
@@ -68,6 +69,7 @@ namespace Knoex.Controllers
             var result = await _userManager.CreateAsync(user, password);
             if (result.Succeeded)
             {
+                AddNotification("Registration Successful", "You have successfully registered an account.");
                 return RedirectToAction(nameof(Login));
             }
             return RedirectToAction(nameof(Register));

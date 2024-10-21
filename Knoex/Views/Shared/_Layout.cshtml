@@ -8,7 +8,8 @@
 
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
     <link rel="stylesheet" href="/css/style.css">
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/@@alpinejs/focus@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 
 <body class="font-sans text-gray-800 bg-gray-100">
@@ -30,6 +31,8 @@
             &copy; @DateTime.Now.Year.ToString() Knoex. All rights reserved.
         </p>
     </footer>
+    <div id="modal"></div>
+    <partial name="_Notifications" />
     @RenderSection("Scripts", required: false)
 </body>
 
