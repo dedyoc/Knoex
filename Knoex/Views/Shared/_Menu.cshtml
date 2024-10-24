@@ -143,4 +143,8 @@
             }
         </div>
     </div>
+    @if (User.Identity.IsAuthenticated && ViewBag.CurrentUser != null)
+    {
+        <partial name="_Settings" />
+    }
 </nav>
