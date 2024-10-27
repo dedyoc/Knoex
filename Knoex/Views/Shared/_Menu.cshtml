@@ -143,7 +143,7 @@
             }
         </div>
     </div>
-    @if (User.Identity.IsAuthenticated && ViewBag.CurrentUser != null)
+    @if ((User?.Identity?.IsAuthenticated ?? false) && ViewBag.CurrentUser != null)
     {
         <partial name="_Settings" />
     }
