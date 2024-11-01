@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Knoex.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class RedoInitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -23,6 +23,19 @@ namespace Knoex.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("pk_roles", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "tags",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    name = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_tags", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -68,6 +81,43 @@ namespace Knoex.Migrations
                         name: "fk_role_claims_roles_role_id",
                         column: x => x.role_id,
                         principalTable: "roles",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "post",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    type = table.Column<int>(type: "integer", nullable: false),
+                    parent_id = table.Column<int>(type: "integer", nullable: true),
+                    accepted_answer_id = table.Column<int>(type: "integer", nullable: true),
+                    user_id = table.Column<int>(type: "integer", nullable: false),
+                    title = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true),
+                    body = table.Column<string>(type: "text", nullable: true),
+                    created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_post", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_post_post_accepted_answer_id",
+                        column: x => x.accepted_answer_id,
+                        principalTable: "post",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "fk_post_post_parent_id",
+                        column: x => x.parent_id,
+                        principalTable: "post",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "fk_post_users_user_id",
+                        column: x => x.user_id,
+                        principalTable: "users",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -157,6 +207,51 @@ namespace Knoex.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "post_tag",
+                columns: table => new
+                {
+                    posts_id = table.Column<int>(type: "integer", nullable: false),
+                    tags_id = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_post_tag", x => new { x.posts_id, x.tags_id });
+                    table.ForeignKey(
+                        name: "fk_post_tag_posts_posts_id",
+                        column: x => x.posts_id,
+                        principalTable: "post",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "fk_post_tag_tags_tags_id",
+                        column: x => x.tags_id,
+                        principalTable: "tags",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "ix_post_accepted_answer_id",
+                table: "post",
+                column: "accepted_answer_id",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "ix_post_parent_id",
+                table: "post",
+                column: "parent_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_post_user_id",
+                table: "post",
+                column: "user_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_post_tag_tags_id",
+                table: "post_tag",
+                column: "tags_id");
+
             migrationBuilder.CreateIndex(
                 name: "ix_role_claims_role_id",
                 table: "role_claims",
@@ -198,6 +293,9 @@ namespace Knoex.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "post_tag");
+
+            migrationBuilder.DropTable(
                 name: "role_claims");
 
             migrationBuilder.DropTable(
@@ -211,6 +309,12 @@ namespace Knoex.Migrations
 
             migrationBuilder.DropTable(
                 name: "user_tokens");
+
+            migrationBuilder.DropTable(
+                name: "post");
+
+            migrationBuilder.DropTable(
+                name: "tags");
 
             migrationBuilder.DropTable(
                 name: "roles");

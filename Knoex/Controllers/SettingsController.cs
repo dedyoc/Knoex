@@ -17,14 +17,14 @@ namespace Knoex.Controllers
         }
         [Authorize]
         [HttpPost("/settings")]
-        public async Task<RedirectResult> Save(string email, string first_name, string last_name, string current_password, string new_password, string url)
+        public async Task<RedirectResult> Save(string email, string firstName, string lastName, string currentPassword, string newPassword, string url)
         {
             var user = await _userRepository.GetCurrentUserAsync();
-            var result = await _signInManager.CheckPasswordSignInAsync(user, current_password, false);
+            var result = await _signInManager.CheckPasswordSignInAsync(user, currentPassword, false);
             if (result.Succeeded)
             {
-                await _userRepository.UpdateUserAsync(user.Id, email, first_name, last_name);
-                if (new_password != null) await _userRepository.UpdatePasswordAsync(user, current_password, new_password);
+                await _userRepository.UpdateUserAsync(user.Id, email, firstName, lastName);
+                if (newPassword != null) await _userRepository.UpdatePasswordAsync(user, currentPassword, newPassword);
                 AddNotification("Success", "Settings updated successfully");
             }
             else

@@ -57,8 +57,12 @@ builder.Services.AddMvc(options =>
     options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
     options.Filters.Add<ViewBagActionFilter>();
 });
-
+// Dependency injection
 builder.Services.AddTransient<IUserRepository, UserRepository>();
+builder.Services.AddTransient<ITagRepository, TagRepository>();
+builder.Services.AddTransient<IPostRepository, PostRepository>();
+
+// Add the IHttpContextAccessor service
 builder.Services.AddHttpContextAccessor();
 #endregion
 
