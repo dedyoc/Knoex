@@ -13,14 +13,14 @@ namespace Knoex.Repositories
             _context = context;
             _tagRepository = tagRepository;
         }
-        public Task<List<Post>> GetPostsAsync()
+        public Task<PagedResult<Post>> GetPostsAsync(int page = 1, int pageSize = 10)
         {
             return _context.Posts
                 .Where(p => p.ParentId == null)
                 .Include(p => p.Tags)
                 .Include(p => p.User)
                 .OrderByDescending(p => p.CreatedAt)
-                .ToListAsync();
+                .GetPagedAsync(page, pageSize);
         }
         public Task<int> CreatePostAsync(Post post, User user)
         {

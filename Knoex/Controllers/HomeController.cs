@@ -1,26 +1,37 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Knoex.Models;
+using Knoex.Repositories;
+using Knoex.Data;
+using Knoex.ViewModels;
 
 namespace Knoex.Controllers;
 
 public class HomeController : CommonController
 {
-    private readonly ILogger<HomeController> _logger;
+    private readonly IPostRepository _postRepository;
 
-    public HomeController(ILogger<HomeController> logger)
+    public HomeController(IPostRepository postRepository)
     {
-        _logger = logger;
+        _postRepository = postRepository;
     }
 
-    public IActionResult Index()
+    [HttpGet("/")]
+    public async Task<IActionResult> Index(int page = 1, string filter = "newest")
     {
-        return View();
-    }
+        PagedResult<Post> posts = filter switch
+        {
+            "newest" => await _postRepository.GetPostsAsync(page),
+            "unanswered" => await _postRepository.GetPostsAsync(page),
+            "activity" => await _postRepository.GetPostsAsync(page),
+            _ => await _postRepository.GetPostsAsync(page)
+        };
 
-    public IActionResult Privacy()
-    {
-        return View();
+        return View(new HomeViewModel
+        {
+            CurrentFilter = filter,
+            Posts = posts
+        });
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
