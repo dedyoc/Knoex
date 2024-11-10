@@ -40,7 +40,6 @@ namespace Knoex.Migrations
                         .HasColumnName("body");
 
                     b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at");
 
@@ -56,6 +55,10 @@ namespace Knoex.Migrations
                     b.Property<int>("Type")
                         .HasColumnType("integer")
                         .HasColumnName("type");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
 
                     b.Property<int>("UserId")
                         .HasColumnType("integer")
@@ -120,9 +123,17 @@ namespace Knoex.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
                     b.Property<string>("Name")
                         .HasColumnType("text")
                         .HasColumnName("name");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
 
                     b.HasKey("Id")
                         .HasName("pk_tags");
@@ -148,10 +159,9 @@ namespace Knoex.Migrations
                         .HasColumnType("text")
                         .HasColumnName("concurrency_stamp");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .ValueGeneratedOnAdd()
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_date");
+                        .HasColumnName("created_at");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)

@@ -10,7 +10,10 @@ namespace Knoex.Data
         public KnoexContext(DbContextOptions<KnoexContext> options) : base(options)
         {
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="builder"></param>
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

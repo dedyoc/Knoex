@@ -22,6 +22,26 @@ namespace Knoex.Repositories
                 .OrderByDescending(p => p.CreatedAt)
                 .GetPagedAsync(page, pageSize);
         }
+
+        public Task<PagedResult<Post>> GetUnansweredPostsAsync(int page = 1, int pageSize = 10)
+        {
+            return _context.Posts
+                .Where(p => p.ParentId == null && p.AcceptedAnswerId == null)
+                .Include(p => p.Tags)
+                .Include(p => p.User)
+                .OrderByDescending(p => p.CreatedAt)
+                .GetPagedAsync(page, pageSize);
+        }
+
+        public Task<PagedResult<Post>> GetRecentActivityPostsAsync(int page = 1, int pageSize = 10)
+        {
+            return _context.Posts
+                .Where(p => p.ParentId == null)
+                .Include(p => p.Tags)
+                .Include(p => p.User)
+                .OrderByDescending(p => p.UpdatedAt)
+                .GetPagedAsync(page, pageSize);
+        }
         public Task<int> CreatePostAsync(Post post, User user)
         {
             post.Type = (PostType)(int)PostType.Question;

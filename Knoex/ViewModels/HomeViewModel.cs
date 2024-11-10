@@ -6,7 +6,7 @@ namespace Knoex.ViewModels
     /// <summary>
     /// Represents the view model for the Home view.
     /// </summary>
-    public class HomeViewModel
+    public class HomeViewModel : BaseViewModel
     {
         /// <summary>
         /// Gets or sets the list of available filters for posts.

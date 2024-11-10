@@ -11,8 +11,7 @@ namespace Knoex.Models
         public string? FirstName { get; set; }
         [PersonalData]
         public string? LastName { get; set; }
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public string Avatar(int size = 200)
         {
             using (var md5 = MD5.Create())

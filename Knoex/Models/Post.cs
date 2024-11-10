@@ -9,9 +9,8 @@ namespace Knoex.Models
         Question = 1,
         Answer = 2,
     }
-    public class Post
+    public class Post : BaseModel
     {
-        public int Id { get; set; }
         public PostType Type { get; set; }
         [AllowNull]
         public int? ParentId { get; set; }
@@ -30,8 +29,6 @@ namespace Knoex.Models
         [Column(TypeName = "text")]
         public string Body { get; set; }
         public virtual ICollection<Tag> Tags { get; set; }
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public Post()
         {
             Tags = new HashSet<Tag>();

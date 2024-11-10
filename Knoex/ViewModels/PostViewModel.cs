@@ -3,9 +3,10 @@ using Knoex.Models;
 
 namespace Knoex.ViewModels
 {
-    public class PostViewModel
+    public class PostViewModel : BaseViewModel
     {
         public Post Post;
+        public string Timestamp => TimeZoneInfo.ConvertTime(Post.CreatedAt, TimeZone).ToString("dd-MM-yyyy HH:mm");
         public string Summary()
         {
             string content = Post.Body;
