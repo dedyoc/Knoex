@@ -35,6 +35,8 @@ namespace Knoex.Data
             builder.Entity<Post>().HasMany(p => p.Answers).WithOne(p => p.Parent)
                 .HasForeignKey(p => p.ParentId).OnDelete(DeleteBehavior.Restrict);
         }
+        public DbSet<Comment> Comments { get; set; }
+
         public DbSet<Post> Posts { get; set; }
         public DbSet<Tag> Tags { get; set; }
         public override DbSet<User>? Users { get; set; }

@@ -29,6 +29,8 @@ namespace Knoex.Models
         [Column(TypeName = "text")]
         public string Body { get; set; }
         public virtual ICollection<Tag> Tags { get; set; }
+        public virtual ICollection<Comment> Comments { get; set; }
+
         public Post()
         {
             Tags = new HashSet<Tag>();

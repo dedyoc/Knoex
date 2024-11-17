@@ -61,6 +61,7 @@ builder.Services.AddMvc(options =>
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<ITagRepository, TagRepository>();
 builder.Services.AddTransient<IPostRepository, PostRepository>();
+builder.Services.AddTransient<ICommentRepository, CommentRepository>();
 
 // Add the IHttpContextAccessor service
 builder.Services.AddHttpContextAccessor();

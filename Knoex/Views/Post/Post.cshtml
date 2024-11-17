@@ -1,0 +1,61 @@
+@model Knoex.ViewModels.PostViewModel
+@{
+    ViewData["Title"] = Model.Post.Title;
+}
+<div class="flex space-x-6 mt-6">
+    <div class="flex flex-col space-y-6 w-9/12">
+        <partial name="Post/_SinglePostDetail" model="new Knoex.ViewModels.PostViewModel{ Post = Model.Post }" />
+        @foreach (Post answers in Model.Post.Answers)
+        {
+            <partial name="Post/_SinglePostDetail" model="new Knoex.ViewModels.PostViewModel{ Post = answers }" />
+        }
+        @if (User.Identity.IsAuthenticated)
+        {
+            <form action="/questions/@Model.Post.Id/answer" method="POST">
+                @Html.AntiForgeryToken()
+                <div class="shadow overflow-hidden sm:rounded-md bg-white">
+                    <div class="px-4 py-3 sm:px-6">
+                        <label for="body" class="block mb-1 text-lg text-gray-700">Your answer</label>
+                        <textarea id="emde" name="body" class="CodeMirror w-full h-72 invisible"></textarea>
+                    </div>
+                    <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
+                        <button type="submit"
+                            class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            Post answer
+                        </button>
+                    </div>
+                </div>
+            </form>
+        }
+    </div>
+    <div class="w-3/12">
+        <h2 class="text-lg text-indigo-800">
+            Tags
+        </h2>
+        <div class="flex mt-2 mb-5">
+            @foreach (Tag tag in @Model.Post.Tags)
+            {
+                <div class="mr-1 px-3 border rounded-full bg-white">
+                    @tag.Name
+                </div>
+            }
+        </div>
+        <h2 class="text-lg text-indigo-800">
+            Related
+        </h2>
+    </div>
+</div>
+@section scripts {
+    <link rel="stylesheet" href="https://unpkg.com/easymde/dist/easymde.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js"></script>
+    <script>
+        var easyMDE = new EasyMDE({
+            element: document.getElementById("emde"),
+            spellChecker: false,
+            promptURLs: true,
+            toolbar: ["bold", "italic", "strikethrough", "quote", "|", "code", "link", "image", "|", "preview", "guide"],
+            autosave: { enabled: false },
+            status: false
+        });
+    </script>
+}

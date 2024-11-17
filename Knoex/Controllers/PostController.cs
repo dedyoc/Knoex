@@ -1,5 +1,6 @@
 using Knoex.Models;
 using Knoex.Repositories;
+using Knoex.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -41,6 +42,33 @@ namespace Knoex.Controllers
             AddNotification("Success", "Your question is successfully created");
             return Redirect("/");
             // return View();
+        }
+
+
+        [HttpGet("/questions/{id}")]
+        public async Task<IActionResult> Post(int id)
+        {
+            var post = await _postRepository.GetPostWithDetailsAsync(id);
+            if (post == null) return NotFound();
+            return View(new PostViewModel
+            {
+                Post = post
+            });
+        }
+
+        [Authorize]
+        [HttpPost("/questions/{id}/answer")]
+        public async Task<IActionResult> Answer(int id, [Bind("Body")] Post answer)
+        {
+            var post = await _postRepository.GetPostByIdAsync(id);
+            if (post == null || post.ParentId != null) return NotFound();
+            if (ModelState.IsValid)
+            {
+                User user = await _userRepository.GetCurrentUserAsync();
+                await _postRepository.AddAnswerToPostAsync(post, answer, user);
+                AddNotification("Success", "Your answer is successfully added");
+            }
+            return RedirectToAction(nameof(Post), new { id = post.Id });
         }
     }
 }
