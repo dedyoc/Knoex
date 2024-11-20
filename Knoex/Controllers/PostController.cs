@@ -10,10 +10,12 @@ namespace Knoex.Controllers
     {
         private readonly IUserRepository _userRepository;
         private readonly IPostRepository _postRepository;
-        public PostController(IPostRepository postRepository, IUserRepository userRepository)
+        private readonly IVoteRepository _voteRepository;
+        public PostController(IPostRepository postRepository, IUserRepository userRepository, IVoteRepository voteRepository)
         {
             _userRepository = userRepository;
             _postRepository = postRepository;
+            _voteRepository = voteRepository;
         }
         [Authorize]
         [HttpGet("/ask")]
@@ -50,10 +52,24 @@ namespace Knoex.Controllers
         {
             var post = await _postRepository.GetPostWithDetailsAsync(id);
             if (post == null) return NotFound();
-            return View(new PostViewModel
+            if (User.Identity.IsAuthenticated)
             {
-                Post = post
-            });
+                User user = await _userRepository.GetCurrentUserAsync();
+                List<Vote> votes = await _voteRepository.GetGivenVotes(post, user);
+                await _postRepository.RegisterViewAsync(post, user);
+                return View(new PostViewModel
+                {
+                    Post = post,
+                    GivenVotes = votes
+                });
+            }
+            else
+            {
+                return View(new PostViewModel
+                {
+                    Post = post,
+                });
+            }
         }
 
         [Authorize]

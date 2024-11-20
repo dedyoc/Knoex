@@ -36,9 +36,10 @@ namespace Knoex.Data
                 .HasForeignKey(p => p.ParentId).OnDelete(DeleteBehavior.Restrict);
         }
         public DbSet<Comment> Comments { get; set; }
-
         public DbSet<Post> Posts { get; set; }
         public DbSet<Tag> Tags { get; set; }
+        public DbSet<Vote> Votes { get; set; }
+        public DbSet<View> Views { get; set; }
         public override DbSet<User>? Users { get; set; }
     }
 }

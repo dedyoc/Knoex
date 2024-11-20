@@ -21,10 +21,9 @@ namespace Knoex.Controllers
         }
         [Authorize]
         [HttpPost("/questions/{id}/comments")]
-        public async Task<IActionResult> Anwser(int id, [Bind("Body")] Comment comment)
+        public async Task<IActionResult> Answer(int id, [Bind("Body")] Comment comment)
         {
             var post = await _postRepository.GetPostByIdAsync(id);
-            if (post == null) return NotFound();
             if (ModelState.IsValid)
             {
                 User user = await _userRepository.GetCurrentUserAsync();

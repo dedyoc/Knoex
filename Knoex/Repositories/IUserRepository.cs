@@ -10,5 +10,6 @@ namespace Knoex.Repositories
         Task<User> GetCurrentUserAsync();
         Task<int> UpdateUserAsync(int id, string email, string first_name, string last_name);
         Task<IdentityResult> UpdatePasswordAsync(User user, string currentPassword, string newPassword);
+        Task<int> UpdateCountersAsync(User user);
     }
 }

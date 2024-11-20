@@ -12,6 +12,9 @@ namespace Knoex.Models
         [PersonalData]
         public string? LastName { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        public int AcceptedAnswerCount { get; set; } = 0;
+        public int QuestionCount { get; set; } = 0;
         public string Avatar(int size = 200)
         {
             using (var md5 = MD5.Create())

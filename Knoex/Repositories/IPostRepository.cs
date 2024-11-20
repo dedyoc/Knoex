@@ -14,7 +14,11 @@ namespace Knoex.Repositories
 
         Task<int> CreatePostAsync(Post post, User user);
         Task<int> AddTagToPostAsync(Post post, string[] tags);
-        Task<int> AddAnswerToPostAsync(Post post, Post anwser, User user);
+        Task<int> AddAnswerToPostAsync(Post post, Post answer, User user);
+        Task<int> UpdateVoteScoreAsync(Post post, int score);
+        Task<int> UpdateCountersAsync(Post post);
+
+        Task<int> RegisterViewAsync(Post post, User user);
 
     }
 }

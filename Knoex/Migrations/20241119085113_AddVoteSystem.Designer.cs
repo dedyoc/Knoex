@@ -3,6 +3,7 @@ using System;
 using Knoex.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Knoex.Migrations
 {
     [DbContext(typeof(KnoexContext))]
-    partial class KnoexContextModelSnapshot : ModelSnapshot
+    [Migration("20241119085113_AddVoteSystem")]
+    partial class AddVoteSystem
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -285,43 +287,6 @@ namespace Knoex.Migrations
                     b.ToTable("users", (string)null);
                 });
 
-            modelBuilder.Entity("Knoex.Models.View", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_at");
-
-                    b.Property<int>("PostId")
-                        .HasColumnType("integer")
-                        .HasColumnName("post_id");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("updated_at");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer")
-                        .HasColumnName("user_id");
-
-                    b.HasKey("Id")
-                        .HasName("pk_views");
-
-                    b.HasIndex("PostId")
-                        .HasDatabaseName("ix_views_post_id");
-
-                    b.HasIndex("UserId")
-                        .HasDatabaseName("ix_views_user_id");
-
-                    b.ToTable("views", (string)null);
-                });
-
             modelBuilder.Entity("Knoex.Models.Vote", b =>
                 {
                     b.Property<int>("Id")
@@ -557,27 +522,6 @@ namespace Knoex.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Knoex.Models.View", b =>
-                {
-                    b.HasOne("Knoex.Models.Post", "Post")
-                        .WithMany("Views")
-                        .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_views_posts_post_id");
-
-                    b.HasOne("Knoex.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_views_users_user_id");
-
-                    b.Navigation("Post");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Knoex.Models.Vote", b =>
                 {
                     b.HasOne("Knoex.Models.Post", "Post")
@@ -678,8 +622,6 @@ namespace Knoex.Migrations
                     b.Navigation("Answers");
 
                     b.Navigation("Comments");
-
-                    b.Navigation("Views");
 
                     b.Navigation("Votes");
                 });

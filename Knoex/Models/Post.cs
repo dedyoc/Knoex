@@ -28,13 +28,21 @@ namespace Knoex.Models
         public string Title { get; set; }
         [Column(TypeName = "text")]
         public string Body { get; set; }
+        public int VoteScore { get; set; } = 0;
+        public int ViewCount { get; set; } = 0;
+        public int AnswersCount { get; set; } = 0;
         public virtual ICollection<Tag> Tags { get; set; }
         public virtual ICollection<Comment> Comments { get; set; }
+        public virtual ICollection<Vote> Votes { get; set; }
+        public virtual ICollection<View> Views { get; set; }
 
         public Post()
         {
             Tags = new HashSet<Tag>();
+            Comments = new HashSet<Comment>();
             Answers = new HashSet<Post>();
+            Votes = new HashSet<Vote>();
+            Views = new HashSet<View>();
         }
     }
 }

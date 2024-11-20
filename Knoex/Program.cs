@@ -62,7 +62,7 @@ builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<ITagRepository, TagRepository>();
 builder.Services.AddTransient<IPostRepository, PostRepository>();
 builder.Services.AddTransient<ICommentRepository, CommentRepository>();
-
+builder.Services.AddTransient<IVoteRepository, VoteRepository>();
 // Add the IHttpContextAccessor service
 builder.Services.AddHttpContextAccessor();
 #endregion

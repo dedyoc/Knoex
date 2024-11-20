@@ -59,8 +59,9 @@ namespace Knoex.Repositories
                 .Include(p => p.Comments)
                 .ThenInclude(comments => comments.User)
                 .Include(p => p.Answers)
-                .ThenInclude(anwsers => anwsers.Comments)
-                .ThenInclude(anwserComments => anwserComments.User)
+                .ThenInclude(answers => answers.Comments)
+                .ThenInclude(answerComments => answerComments.User)
+                .AsSplitQuery()
                 .FirstAsync();
         }
 
@@ -89,5 +90,31 @@ namespace Knoex.Repositories
             _context.Posts.Add(answer);
             return await _context.SaveChangesAsync();
         }
+
+
+        public async Task<int> UpdateVoteScoreAsync(Post post, int score)
+        {
+            post.VoteScore = score;
+            return await _context.SaveChangesAsync();
+        }
+
+        public async Task<int> UpdateCountersAsync(Post post)
+        {
+            post.AnswersCount = _context.Posts.Count(p => p.ParentId == post.Id);
+            post.ViewCount = _context.Views.Count(v => v.PostId == post.Id);
+            return await _context.SaveChangesAsync();
+        }
+
+        public async Task<int> RegisterViewAsync(Post post, User user)
+        {
+            var view = _context.Views
+                .Where(v => v.PostId == post.Id && v.UserId == user.Id)
+                .FirstOrDefault();
+            if (view == null) _context.Views.Add(new View { PostId = post.Id, UserId = user.Id });
+            else view.UpdateTimestamp();
+            await _context.SaveChangesAsync();
+            return await UpdateCountersAsync(post);
+        }
+
     }
 }
