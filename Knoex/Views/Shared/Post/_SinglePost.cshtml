@@ -6,7 +6,7 @@
             <span class="md:-mb-1 mr-1 text-gray-900 md:text-lg">@Model.Post.VoteScore</span>
             votes
         </div>
-        <div class="flex items-end mr-3 md:m-0">
+        <div class="flex items-end mr-3 md:m-0 @(Model.Post.AcceptedAnswerId != null ? "font-medium text-green-600" : "")">
             <span class="md:-mb-1 mr-1 text-gray-900 md:text-lg">@Model.Post.AnswersCount</span>
             answers
         </div>
@@ -25,9 +25,9 @@
         <div class="flex mt-2">
             @foreach (Tag tag in @Model.Post.Tags)
             {
-                <div class="mr-1 px-3 border rounded-full">
+                    <div class="mr-1 px-3 border rounded-full">
                     @tag.Name
-                </div>
+                    </div>
             }
         </div>
     </div>

@@ -100,10 +100,7 @@ namespace Knoex.Controllers
             AddNotification("Success", "Answer accepted successfully");
             foreach (Post a in post.Answers)
             {
-                if (a.Id != answer.Id)
-                {
-                    await _postRepository.UpdateCountersAsync(a);
-                }
+                await _postRepository.UpdateCountersAsync(a);
             }
             return RedirectToAction(nameof(Post), new { id = post.Id });
         }

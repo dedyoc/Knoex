@@ -1,0 +1,13 @@
+model Knoex.ViewModels.UserDetailViewModel
+@{
+    ViewData["Title"] = $"{Model.User.FirstName} {Model.User.LastName}";
+}
+<div class="flex flex-col my-8 divide-y shadow sm:rounded-md bg-white">
+
+    @foreach (Post post in Model.Posts.Results)
+    {
+        <partial name="Post/_SinglePost" model="new Knoex.ViewModels.PostViewModel{ Post = post }" />
+    }
+
+</div>
+<partial name="_Paging" model="new Knoex.ViewModels.PagingViewModel{ Meta = Model.Posts.Meta }" />

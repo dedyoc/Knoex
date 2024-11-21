@@ -20,5 +20,6 @@ namespace Knoex.Repositories
 
         Task<int> RegisterViewAsync(Post post, User user);
         Task<int> AcceptAnswerAsync(Post post, Post answer);
+        Task<PagedResult<Post>> GetPostsByUserAsync(User user, int page = 1);
     }
 }

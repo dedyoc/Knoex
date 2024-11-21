@@ -58,10 +58,12 @@ namespace Knoex.Repositories
                 .Include(p => p.User)
                 .Include(p => p.Tags)
                 .Include(p => p.Comments)
-                .ThenInclude(comments => comments.User)
+                    .ThenInclude(comments => comments.User) // Comment's user
                 .Include(p => p.Answers)
-                .ThenInclude(answers => answers.Comments)
-                .ThenInclude(answerComments => answerComments.User)
+                    .ThenInclude(anwsers => anwsers.User) // Answer's user
+                .Include(p => p.Answers)
+                    .ThenInclude(answers => answers.Comments)
+                        .ThenInclude(answerComments => answerComments.User) // Answer's comments user
                 .AsSplitQuery()
                 .FirstAsync();
         }
@@ -121,6 +123,17 @@ namespace Knoex.Repositories
         {
             post.AcceptedAnswerId = answer.Id;
             return await _context.SaveChangesAsync();
+        }
+
+        public Task<PagedResult<Post>> GetPostsByUserAsync(User user, int page = 1)
+        {
+            return _context.Posts
+                .Where(p => p.UserId == user.Id)
+                .Where(p => p.ParentId == null)
+                .Include(p => p.Tags)
+                .Include(p => p.User)
+                .OrderByDescending(p => p.CreatedAt)
+                .GetPagedAsync(page, 10);
         }
     }
 }
