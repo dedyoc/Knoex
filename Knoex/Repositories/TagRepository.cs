@@ -22,5 +22,12 @@ namespace Knoex.Repositories
             }
             return tag;
         }
+
+        public async Task<PagedResult<Tag>> GetTagsAsync(int page = 1)
+        {
+            return await _context.Tags
+                .OrderBy(t => t.Name)
+                .GetPagedAsync(page, 50);
+        }
     }
 }

@@ -3,6 +3,7 @@ using System;
 using Knoex.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using NpgsqlTypes;
@@ -12,9 +13,10 @@ using NpgsqlTypes;
 namespace Knoex.Migrations
 {
     [DbContext(typeof(KnoexContext))]
-    partial class KnoexContextModelSnapshot : ModelSnapshot
+    [Migration("20241121093128_AddFullTextSearch")]
+    partial class AddFullTextSearch
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -94,11 +96,8 @@ namespace Knoex.Migrations
                         .HasColumnName("parent_id");
 
                     b.Property<NpgsqlTsVector>("SearchVector")
-                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("tsvector")
-                        .HasColumnName("search_vector")
-                        .HasAnnotation("Npgsql:TsVectorConfig", "english")
-                        .HasAnnotation("Npgsql:TsVectorProperties", new[] { "Title", "Body" });
+                        .HasColumnName("search_vector");
 
                     b.Property<string>("Title")
                         .HasMaxLength(255)
@@ -134,11 +133,6 @@ namespace Knoex.Migrations
 
                     b.HasIndex("ParentId")
                         .HasDatabaseName("ix_post_parent_id");
-
-                    b.HasIndex("SearchVector")
-                        .HasDatabaseName("ix_post_search_vector");
-
-                    NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("SearchVector"), "GIN");
 
                     b.HasIndex("UserId")
                         .HasDatabaseName("ix_post_user_id");

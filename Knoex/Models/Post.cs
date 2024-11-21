@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
+using NpgsqlTypes;
 
 namespace Knoex.Models
 {
@@ -35,6 +36,7 @@ namespace Knoex.Models
         public virtual ICollection<Comment> Comments { get; set; }
         public virtual ICollection<Vote> Votes { get; set; }
         public virtual ICollection<View> Views { get; set; }
+        public NpgsqlTsVector SearchVector { get; set; }
 
         public Post()
         {
