@@ -86,5 +86,26 @@ namespace Knoex.Controllers
             }
             return RedirectToAction(nameof(Post), new { id = post.Id });
         }
+
+        [Authorize]
+        [HttpPost("/questions/{id}/accept/{answerId}")]
+        public async Task<IActionResult> AcceptAnswer(int id, int answerId)
+        {
+            var post = await _postRepository.GetPostByIdAsync(id);
+            var answer = await _postRepository.GetPostByIdAsync(answerId);
+            if (post == null || answer == null || post.ParentId != null || answer.ParentId != post.Id) return NotFound();
+            User user = await _userRepository.GetCurrentUserAsync();
+            if (post.UserId != user.Id) return Forbid();
+            await _postRepository.AcceptAnswerAsync(post, answer);
+            AddNotification("Success", "Answer accepted successfully");
+            foreach (Post a in post.Answers)
+            {
+                if (a.Id != answer.Id)
+                {
+                    await _postRepository.UpdateCountersAsync(a);
+                }
+            }
+            return RedirectToAction(nameof(Post), new { id = post.Id });
+        }
     }
 }

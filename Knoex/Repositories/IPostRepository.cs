@@ -19,6 +19,6 @@ namespace Knoex.Repositories
         Task<int> UpdateCountersAsync(Post post);
 
         Task<int> RegisterViewAsync(Post post, User user);
-
+        Task<int> AcceptAnswerAsync(Post post, Post answer);
     }
 }

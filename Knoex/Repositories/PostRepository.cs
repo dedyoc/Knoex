@@ -46,6 +46,7 @@ namespace Knoex.Repositories
         public Task<Post> GetPostByIdAsync(int id)
         {
             return _context.Posts
+                .Include(p => p.User)
                 .Where(p => p.Id == id)
                 .FirstAsync();
         }
@@ -116,5 +117,10 @@ namespace Knoex.Repositories
             return await UpdateCountersAsync(post);
         }
 
+        public async Task<int> AcceptAnswerAsync(Post post, Post answer)
+        {
+            post.AcceptedAnswerId = answer.Id;
+            return await _context.SaveChangesAsync();
+        }
     }
 }
