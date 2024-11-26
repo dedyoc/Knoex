@@ -9,6 +9,7 @@ namespace Knoex.ViewModels
         public string Timestamp => GetTimestamp(Post.CreatedAt);
         public string GetMarkdownHtml() => Markdown.ToHtml(Post.Body ?? "");
         public List<Vote> GivenVotes = new();
+        public List<Post> RelatedPosts = new();
         public int GetGivenVote()
         {
             return (int)(GivenVotes.Find(v => v.PostId == Post.Id)?.Type ?? 0);

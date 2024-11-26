@@ -13,9 +13,12 @@ builder.Services.AddControllersWithViews();
 
 // var connectionString = builder.Configuration.GetConnectionString("PostgreSQL"); // Use this for Docker
 
-// For local development (during testing before Docker):
-var connectionString = "Host=localhost;Port=5432;Database=knoex;Username=knoex;Password=knoex;";
+var connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__PostgreSQL");
 
+if (string.IsNullOrEmpty(connectionString))
+{
+    connectionString = "Host=localhost;Port=5432;Database=knoex;Username=knoex;Password=knoex;"; // Your default connection string
+}
 #region Configure services
 builder.Services.AddDbContext<KnoexContext>(options =>
 {
@@ -30,7 +33,6 @@ builder.Services.AddIdentity<User, Role>(options => options.SignIn.RequireConfir
 builder.Services.Configure<IdentityOptions>(options =>
 {
     options.SignIn.RequireConfirmedAccount = false;
-
     options.User.RequireUniqueEmail = true;
 });
 

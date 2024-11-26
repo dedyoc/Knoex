@@ -22,8 +22,8 @@ public class HomeController : CommonController
         PagedResult<Post> posts = filter switch
         {
             "newest" => await _postRepository.GetPostsAsync(page),
-            "unanswered" => await _postRepository.GetPostsAsync(page),
-            "activity" => await _postRepository.GetPostsAsync(page),
+            "unanswered" => await _postRepository.GetUnansweredPostsAsync(page),
+            "activity" => await _postRepository.GetRecentActivityPostsAsync(page),
             _ => await _postRepository.GetPostsAsync(page)
         };
 

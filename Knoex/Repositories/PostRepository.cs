@@ -67,7 +67,29 @@ namespace Knoex.Repositories
                 .AsSplitQuery()
                 .FirstAsync();
         }
-
+        public List<Post> GetRelatedPosts(Post post, int amount = 10)
+        {
+            List<Post> posts = new();
+            post.Tags.ToList().ForEach(tag =>
+            {
+                var result = _context.Posts
+                    .Where(p => p.Id != post.Id)
+                    .Where(p => p.ParentId == null)
+                    .Where(p => p.Tags.Contains(tag))
+                    .Include(p => p.Tags)
+                    .OrderByDescending(p => p.VoteScore)
+                    .ThenBy(p => p.ViewCount)
+                    .Take(amount * 5)
+                    .ToList();
+                result.ForEach(p => posts.Add(p));
+            });
+            return posts.GroupBy(p => p.Id)
+                .Select(p => new { Post = p.First(), Count = p.Count() })
+                .OrderByDescending(p => p.Count)
+                .Take(amount)
+                .Select(x => x.Post)
+                .ToList();
+        }
         public Task<int> CreatePostAsync(Post post, User user)
         {
             post.Type = (PostType)(int)PostType.Question;
@@ -135,5 +157,6 @@ namespace Knoex.Repositories
                 .OrderByDescending(p => p.CreatedAt)
                 .GetPagedAsync(page, 10);
         }
+
     }
 }

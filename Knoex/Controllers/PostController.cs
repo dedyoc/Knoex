@@ -52,6 +52,7 @@ namespace Knoex.Controllers
         {
             var post = await _postRepository.GetPostWithDetailsAsync(id);
             if (post == null) return NotFound();
+            var related = _postRepository.GetRelatedPosts(post);
             if (User.Identity.IsAuthenticated)
             {
                 User user = await _userRepository.GetCurrentUserAsync();
@@ -60,7 +61,8 @@ namespace Knoex.Controllers
                 return View(new PostViewModel
                 {
                     Post = post,
-                    GivenVotes = votes
+                    GivenVotes = votes,
+                    RelatedPosts = related
                 });
             }
             else
@@ -68,6 +70,7 @@ namespace Knoex.Controllers
                 return View(new PostViewModel
                 {
                     Post = post,
+                    RelatedPosts = related
                 });
             }
         }
