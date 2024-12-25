@@ -31,7 +31,7 @@ Knoex is a community-driven Q&A platform designed to facilitate knowledge sharin
 
 ### Prerequisites
 
-* Docker and Docker Compose
+* Docker and Docker Compose (and .NET 6 to recreate the db from host machine)
 
 ### Running the Application
 
@@ -47,10 +47,11 @@ Knoex is a community-driven Q&A platform designed to facilitate knowledge sharin
    cd Knoex/Knoex
    ```
 
-3. Start the database using Docker Compose:
+3. Start the database using Docker Compose then recreate the db schema:
 
    ```bash
    docker compose up -d
+   dotnet ef database update
    ```
 4. Start the app with `dotnet run`.
 5. Access the application in your browser at `http://localhost:5142` or `http://localhost:7017`.
