@@ -23,7 +23,7 @@ public class HomeController : CommonController
         {
             "newest" => await _postRepository.GetPostsAsync(page),
             "unanswered" => await _postRepository.GetUnansweredPostsAsync(page),
-            "activity" => await _postRepository.GetRecentActivityPostsAsync(page),
+            "active" => await _postRepository.GetRecentActivityPostsAsync(page),
             _ => await _postRepository.GetPostsAsync(page)
         };
 

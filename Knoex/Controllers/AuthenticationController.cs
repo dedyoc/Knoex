@@ -72,6 +72,7 @@ namespace Knoex.Controllers
                 AddNotification("Registration Successful", "You have successfully registered an account.");
                 return RedirectToAction(nameof(Login));
             }
+            AddNotification("Registration Failed", "There was an error registering your account.", false);
             return RedirectToAction(nameof(Register));
         }
     }

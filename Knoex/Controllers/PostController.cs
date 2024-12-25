@@ -40,7 +40,7 @@ namespace Knoex.Controllers
 
             User user = await _userRepository.GetCurrentUserAsync();
             await _postRepository.CreatePostAsync(post, user);
-            await _postRepository.AddTagToPostAsync(post, tags.Take(3).ToArray());
+            await _postRepository.AddTagToPostAsync(post, tags.Take(5).ToArray());
             AddNotification("Success", "Your question is successfully created");
             return Redirect("/");
             // return View();

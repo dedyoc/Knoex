@@ -109,9 +109,13 @@ namespace Knoex.Repositories
 
         public async Task<int> AddAnswerToPostAsync(Post post, Post answer, User user)
         {
-            answer.Type = (PostType)(int)PostType.Answer;
+            answer.Type = PostType.Answer;
             answer.UserId = user.Id;
             answer.ParentId = post.Id;
+            post.UpdatedAt = DateTime.UtcNow;
+
+            _context.Posts.Update(post);
+
             _context.Posts.Add(answer);
             return await _context.SaveChangesAsync();
         }
@@ -144,6 +148,7 @@ namespace Knoex.Repositories
         public async Task<int> AcceptAnswerAsync(Post post, Post answer)
         {
             post.AcceptedAnswerId = answer.Id;
+            post.UpdatedAt = DateTime.UtcNow;
             return await _context.SaveChangesAsync();
         }
 
